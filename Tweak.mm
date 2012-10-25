@@ -21,12 +21,10 @@
 	
 	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
 		//[vc.view removeFromSuperview];
-		[activityViewController.view removeFromSuperview];
+		//[activityViewController.view removeFromSuperview];
 		[vc release];
-		[activityViewController release];
-		[_topWindow setHidden:YES];
-
-		NSLog(@"%@", [_topWindow subviews]);
+		//[activityViewController release];
+		//[_topWindow setHidden:YES];
 	};
 	[event setHandled:YES];
 }
