@@ -1,34 +1,46 @@
-/* How to Hook with Logos
-Hooks are written with syntax similar to that of an Objective-C @implementation.
-You don't need to #include <substrate.h>, it will be done automatically, as will
-the generation of a class list and an automatic constructor.
+#import "OlympusListener.h"
 
-%hook ClassName
+@implementation OlympusListener
 
-// Hooking a class method
-+ (id)sharedInstance {
-	return %orig;
+- (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
+{
+	NSLog(@"Olympus: Recieved event");
+	//UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+	if (!_topWindow) {
+		_topWindow = [[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds] retain];
+		_topWindow.windowLevel = 1050.1f;
+	}
+	_topWindow.hidden = NO;
+	UIViewController *vc  = [[UIViewController alloc] init];
+	
+	[_topWindow addSubview:vc.view];
+
+	NSArray *arr = [NSArray arrayWithObject:@"test"];
+	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:arr applicationActivities:nil];
+	[vc presentViewController:activityViewController animated:YES completion:NULL];
+	
+	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
+		//[vc.view removeFromSuperview];
+		[activityViewController.view removeFromSuperview];
+		[vc release];
+		[activityViewController release];
+		[_topWindow setHidden:YES];
+
+		NSLog(@"%@", [_topWindow subviews]);
+	};
+	[event setHandled:YES];
 }
 
-// Hooking an instance method with an argument.
-- (void)messageName:(int)argument {
-	%log; // Write a message about this call, including its class, name and arguments, to the system log.
-
-	%orig; // Call through to the original function with its original arguments.
-	%orig(nil); // Call through to the original function with a custom argument.
-
-	// If you use %orig(), you MUST supply all arguments (except for self and _cmd, the automatically generated ones.)
+- (void)activator:(LAActivator *)activator abortEvent:(LAEvent *)event
+{
+    [event setHandled:YES];
 }
 
-// Hooking an instance method with no arguments.
-- (id)noArguments {
-	%log;
-	id awesome = %orig;
-	[awesome doSomethingElse];
-
-	return awesome;
++ (void)load
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [[LAActivator sharedInstance] registerListener:[self new] forName:@"com.flux.olympus"];
+    [pool drain];
 }
 
-// Always make sure you clean up after yourself; Not doing so could have grave consequences!
-%end
-*/
+@end
