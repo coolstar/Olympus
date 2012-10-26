@@ -1,4 +1,6 @@
 #import "OlympusListener.h"
+#import "OLWifiToggle.h"
+#import <UIKit/UIKit.h>
 
 @implementation OlympusListener
 
@@ -14,17 +16,20 @@
 	UIViewController *vc  = [[UIViewController alloc] init];
 	
 	[_topWindow addSubview:vc.view];
-
-	NSArray *arr = [NSArray arrayWithObject:@"test"];
+	OLWiFiToggle *wiFiToggle = [[OLWiFiToggle alloc] init];
+	[wiFiToggle setWiFiManager:[%c(SBWiFiManager) sharedInstance]];
+	[wiFiToggle performActivity];
+	NSArray *arr = [NSArray arrayWithObject:@""];
 	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:arr applicationActivities:nil];
 	[vc presentViewController:activityViewController animated:YES completion:NULL];
 	
 	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
-		//[vc.view removeFromSuperview];
-		//[activityViewController.view removeFromSuperview];
+		[vc.view removeFromSuperview];
+		if ([activityViewController.view superview])
+			[activityViewController.view removeFromSuperview];
+		[_topWindow setHidden:YES];	
 		[vc release];
-		//[activityViewController release];
-		//[_topWindow setHidden:YES];
+		[activityViewController release];
 	};
 	[event setHandled:YES];
 }

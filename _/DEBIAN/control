@@ -1,7 +1,7 @@
 Package: com.flux.olympus
 Name: Olympus
 Depends: mobilesubstrate
-Version: 0.0.1-22
+Version: 0.0.1-45
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!
 Maintainer: flux
