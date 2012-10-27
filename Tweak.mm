@@ -1,6 +1,16 @@
-#import "OlympusListener.h"
-#import "OLWifiToggle.h"
 #import <UIKit/UIKit.h>
+#import <objc/runtime.h>
+#import "OlympusListener.h"
+#import "OLWiFiToggle.h"
+
+#define kWiFiManagerSharedInstance (SBWiFiManager *)[objc_getClass("SBWiFiManager") sharedInstance]
+
+@interface SBWiFiManager : NSObject
++ (id)sharedInstance;
+- (BOOL)isWiFiEnabled;
+- (void)setWiFiEnabled:(BOOL)arg;
+@end
+
 
 @implementation OlympusListener
 
@@ -16,11 +26,12 @@
 	UIViewController *vc  = [[UIViewController alloc] init];
 	
 	[_topWindow addSubview:vc.view];
-	OLWiFiToggle *wiFiToggle = [[OLWiFiToggle alloc] init];
-	[wiFiToggle setWiFiManager:[%c(SBWiFiManager) sharedInstance]];
-	[wiFiToggle performActivity];
-	NSArray *arr = [NSArray arrayWithObject:@""];
-	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:arr applicationActivities:nil];
+	_wiFiToggle = [[OLWiFiToggle alloc] init];
+
+	NSArray *activityItemsArray = [NSArray arrayWithObject:@""];
+	NSArray *toggleActivitiesArray = [NSArray arrayWithObjects:_wiFiToggle, nil];
+
+	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItemsArray applicationActivities:toggleActivitiesArray];
 	[vc presentViewController:activityViewController animated:YES completion:NULL];
 	
 	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
