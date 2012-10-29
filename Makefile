@@ -4,7 +4,8 @@ include theos/makefiles/common.mk
 
 TWEAK_NAME = Olympus
 
-Olympus_FILES = Tweak.xm OLWiFiToggle.m
+Olympus_FILES = Tweak.xm $(wildcard Classes/*.m)
+
 Olympus_FRAMEWORKS = UIKit Foundation 
 Olympus_LDFLAGS = -lactivator -Llib/
 

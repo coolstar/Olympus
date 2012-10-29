@@ -3,7 +3,7 @@ Name: Olympus
 Depends: mobilesubstrate
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Toggle stuff, from anywhere!
 Maintainer: flux
 Author: flux
 Section: Tweaks

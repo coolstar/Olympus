@@ -1,44 +1,34 @@
 #import <UIKit/UIKit.h>
-#import <objc/runtime.h>
 #import "OlympusListener.h"
-#import "OLWiFiToggle.h"
-
-#define kWiFiManagerSharedInstance (SBWiFiManager *)[objc_getClass("SBWiFiManager") sharedInstance]
-
-@interface SBWiFiManager : NSObject
-+ (id)sharedInstance;
-- (BOOL)isWiFiEnabled;
-- (void)setWiFiEnabled:(BOOL)arg;
-@end
-
 
 @implementation OlympusListener
 
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
 {
-	NSLog(@"Olympus: Recieved event");
-	//UIWindow *window = [[UIApplication sharedApplication] keyWindow];
 	if (!_topWindow) {
 		_topWindow = [[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds] retain];
-		_topWindow.windowLevel = 1050.1f;
+		_topWindow.windowLevel = UIWindowLevelStatusBar;
 	}
 	_topWindow.hidden = NO;
 	UIViewController *vc  = [[UIViewController alloc] init];
-	
 	[_topWindow addSubview:vc.view];
+
 	_wiFiToggle = [[OLWiFiToggle alloc] init];
+	_airplaneToggle = [[OLAirplaneModeToggle alloc] init];
 
-	NSArray *activityItemsArray = [NSArray arrayWithObject:@""];
-	NSArray *toggleActivitiesArray = [NSArray arrayWithObjects:_wiFiToggle, nil];
+	NSArray *activityItems = [[NSArray alloc] initWithObjects:@" ", nil];
+	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_wiFiToggle, _airplaneToggle, nil]; //[NSArray arrayWithObjects:_wiFiToggle, _airplaneToggle, nil];
 
-	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItemsArray applicationActivities:toggleActivitiesArray];
+	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:toggleActivities];
 	[vc presentViewController:activityViewController animated:YES completion:NULL];
 	
 	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
-		[vc.view removeFromSuperview];
-		if ([activityViewController.view superview])
-			[activityViewController.view removeFromSuperview];
-		[_topWindow setHidden:YES];	
+		[_topWindow performSelector:@selector(setHidden:) withObject:self afterDelay:0.40f];
+
+		[_wiFiToggle release];
+		[_airplaneToggle release];
+		[activityItems release];
+		[toggleActivities release];
 		[vc release];
 		[activityViewController release];
 	};
