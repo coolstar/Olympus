@@ -4,14 +4,14 @@
 
 #import "Classes/OLWifiToggle.h"
 #import "Classes/OLAirplaneModeToggle.h"
+#import "Classes/OLBTToggle.h"
 
 @interface OlympusListener : NSObject <LAListener>
 {
 	UIWindow *_topWindow;
 	OLWiFiToggle *_wiFiToggle;
 	OLAirplaneModeToggle *_airplaneToggle;
+	OLBTToggle *_bluetoothToggle;
 }
-
-//- (id)shareSheetWithItems:(NSArray *)items;
 
 @end
