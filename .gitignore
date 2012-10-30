@@ -1,4 +1,10 @@
 
-.DS_Store
+*.DS_Store
 
 *.deb
+
+*.o
+
+*.dylib
+
+*.stamp
