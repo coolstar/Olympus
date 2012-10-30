@@ -50,9 +50,16 @@
 	NSAutoreleasePool *p = [NSAutoreleasePool new];
 	BluetoothManager *btMan = [objc_getClass("BluetoothManager") sharedInstance];
 	BOOL flippedBit = ![btMan enabled]; //assign to opposite of current Bluetooth state
-	[btMan setEnabled:flippedBit];
+	
+	NSString *body;
 
-	NSString *body = [NSString stringWithFormat:@"Bluetooth %@", (([btMan enabled]) ? @"enabled" : @"disabled")];
+	if ([btMan enabled])
+		body = [NSString stringWithFormat:@"Bluetooth disabled"];
+	else
+		body = [NSString stringWithFormat:@"Bluetooth enabled"];
+	//this has to be done, because it takes time for the enabled property to be updated by the BluetoothManager. Oh well...
+
+	[btMan setEnabled:flippedBit];
 
 	Class bulletinBannerController = objc_getClass("SBBulletinBannerController");
 	Class bulletinRequest = objc_getClass("BBBulletinRequest");
