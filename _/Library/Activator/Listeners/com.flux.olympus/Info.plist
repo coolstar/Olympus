@@ -1,5 +1,0 @@
-{
-	title = "Olympus";
-	description = "Open a share sheet.";
-	"compatible-modes" = ("springboard", "application", "lockscreen");
-}
