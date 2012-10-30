@@ -15,9 +15,10 @@
 
 	_wiFiToggle = [[OLWiFiToggle alloc] init];
 	_airplaneToggle = [[OLAirplaneModeToggle alloc] init];
+	_bluetoothToggle = [[OLBTToggle alloc] init];
 
 	NSArray *activityItems = [[NSArray alloc] initWithObjects:@" ", nil];
-	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_wiFiToggle, _airplaneToggle, nil]; //[NSArray arrayWithObjects:_wiFiToggle, _airplaneToggle, nil];
+	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_wiFiToggle, _airplaneToggle, _bluetoothToggle,nil]; //[NSArray arrayWithObjects:_wiFiToggle, _airplaneToggle, nil];
 
 	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:toggleActivities];
 	[vc presentViewController:activityViewController animated:YES completion:NULL];
@@ -27,6 +28,7 @@
 
 		[_wiFiToggle release];
 		[_airplaneToggle release];
+		[_bluetoothToggle release];
 		[activityItems release];
 		[toggleActivities release];
 		[vc release];
