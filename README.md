@@ -4,3 +4,7 @@ This is a little project I've undertaken to replicate and advance SBSettings' fu
 The ETA for this tweak is sometime in sync with the release of the iOS 6 JB (since now there's only three devices that can use it for now (iPhone 4, iPod Touch 4, iPhone 3GS)).
 
 In the mean time, I would appreciate all the help I can get, so if you think you can help in the slightest, don't hesitate to fork this repo and create pull requests.
+
+
+##Compiling
+For compiling, use <a href="https://github.com/DHowett/theos">Theos</a>. You will need to get `libactivator.dylib` off your device from `/Library/MobileSubsrate/DynamicLibraries/libactivator.dylib` and place it in `lib/`. 
