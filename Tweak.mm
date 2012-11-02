@@ -13,7 +13,7 @@
 {
 	if (!_topWindow) {
 		_topWindow = [[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds] retain];
-		_topWindow.windowLevel = UIWindowLevelStatusBar;
+		_topWindow.windowLevel = 1200.0f;
 	}
 	_topWindow.hidden = NO;
 	UIViewController *vc  = [[UIViewController alloc] init];
@@ -23,10 +23,14 @@
 	_airplaneToggle = [[OLAirplaneModeToggle alloc] init];
 	_bluetoothToggle = [[OLBTToggle alloc] init];
 
+	_powerButton = [[OLPowerButton alloc] initWithView:vc.view];
+
 	NSArray *activityItems = [[NSArray alloc] initWithObjects:@" ", nil];
-	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_wiFiToggle, _airplaneToggle, _bluetoothToggle,nil]; //[NSArray arrayWithObjects:_wiFiToggle, _airplaneToggle, nil];
+	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_airplaneToggle, _wiFiToggle, _bluetoothToggle, _powerButton, nil]; 
 
 	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:toggleActivities];
+
+	[activityViewController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypeCopyToPasteboard, nil]];
 	[vc presentViewController:activityViewController animated:YES completion:NULL];
 	
 	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
