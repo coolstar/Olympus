@@ -21,3 +21,5 @@ For compiling, use <a href="https://github.com/DHowett/theos">Theos</a>. You wil
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+##Supporters
+-Haifisch (@HaifischR)
