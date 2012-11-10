@@ -2,7 +2,7 @@
 #import <UIKit/UIKit.h>
 #import <libactivator/libactivator.h>
 
-#import "CLasses/OLSocialActivity.h"
+#import "Classes/OLSocialActivity.h"
 #import "Classes/OLWifiToggle.h"
 #import "Classes/OLAirplaneModeToggle.h"
 #import "Classes/OLBTToggle.h"
