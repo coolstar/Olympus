@@ -35,8 +35,9 @@
                     cancelButtonTitle:@"Dismiss"
                     otherButtonTitles:nil];
 
-    UISlider *brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(20, 50, 200, 20)];
+    UISlider *brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(20, 50, 270, 20)];
    	brightnessSlider.value = [[UIScreen mainScreen] brightness];
+   	[brightnessSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [alert addSubview:brightnessSlider];            
     [alert show];
     [alert release];
