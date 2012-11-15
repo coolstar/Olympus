@@ -2,11 +2,12 @@
 #import <UIKit/UIKit.h>
 #import <libactivator/libactivator.h>
 
-#import "CLasses/OLSocialActivity.h"
 #import "Classes/OLWifiToggle.h"
 #import "Classes/OLAirplaneModeToggle.h"
 #import "Classes/OLBTToggle.h"
 #import "Classes/OLPowerButton.h"
+#import "Classes/OLCellularToggle.h"
+#import "Classes/OLBrightnessSlider.h"
 
 @interface OlympusListener : NSObject <LAListener>
 {
@@ -16,11 +17,10 @@
 	OLWiFiToggle *_wiFiToggle;
 	OLAirplaneModeToggle *_airplaneToggle;
 	OLBTToggle *_bluetoothToggle;
+	OLCellularToggle *_cellularToggle;
 
 	OLPowerButton *_powerButton;
-
-	//activities by other developers
-	//NSArray *_thirdPartyActivities;
+	OLBrightnessSlider *_brightnessSlider;
 }
 
 @end
