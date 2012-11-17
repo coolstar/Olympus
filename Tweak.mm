@@ -31,10 +31,16 @@ static BOOL messagingEnabled = YES;
 	_wiFiToggle = [[OLWiFiToggle alloc] init];
 	_airplaneToggle = [[OLAirplaneModeToggle alloc] init];
 	_bluetoothToggle = [[OLBTToggle alloc] init];
-	_cellularToggle = [[OLCellularToggle alloc] init];
+	_cellularToggle = nil;
 
 	_powerButton = [[OLPowerButton alloc] initWithView:vc.view];
 	_brightnessSlider = [[OLBrightnessSlider alloc] init];
+
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:+11111"]])
+	{
+		// it has cellular capabilities
+		//_cellularToggle = [[OLCellularToggle alloc] init];
+	}
 
 	NSArray *activityItems = [[NSArray alloc] initWithObjects:@" ", nil];
 	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_airplaneToggle, _wiFiToggle, _bluetoothToggle, _powerButton, _cellularToggle, _brightnessSlider, nil]; 
@@ -89,7 +95,6 @@ static void olReloadPrefs(void)
 	socialActivitiesEnabled = [[prefs objectForKey:@"Social"] boolValue];
 	messagingEnabled = [[prefs objectForKey:@"Messaging"] boolValue];
 }
-
 
 %ctor
 {
