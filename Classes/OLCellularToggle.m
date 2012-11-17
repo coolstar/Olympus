@@ -33,7 +33,6 @@ void CTRegistrationSetCellularDataIsEnabled(void);
 - (void)performActivity
 {
 	CTRegistrationSetCellularDataIsEnabled();
-	//[self activityDidFinish:NO];
 }
 
 @end

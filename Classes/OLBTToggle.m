@@ -1,22 +1,12 @@
 #import "OLBTToggle.h"
 #import <objc/runtime.h>
+#import "BannerClasses.h"
 
 @interface BluetoothManager : NSObject
 + (BluetoothManager *)sharedInstance;
 - (BOOL)setEnabled:(BOOL)arg1;
 - (BOOL)enabled;
 @end 
-
-@interface BBBulletinRequest : NSObject
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *message;
-@property (nonatomic, copy) NSString *sectionID;
-@end
-
-@interface SBBulletinBannerController : NSObject
-+ (SBBulletinBannerController *)sharedInstance;
-- (void)observer:(id)observer addBulletin:(BBBulletinRequest *)bulletin forFeed:(int)feed;
-@end
 
 @implementation OLBTToggle
 

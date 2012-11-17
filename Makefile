@@ -8,7 +8,7 @@ Olympus_FILES = Tweak.xm $(wildcard Classes/*.m)
 
 Olympus_FRAMEWORKS = UIKit Foundation Social Accounts CoreTelephony CoreGraphics
 
-Olympus_LDFLAGS = -lactivator -Llib/
+Olympus_LDFLAGS = -lactivator -Llib/ 
 
 THEOS_BUILD_DIR = debs/
 
