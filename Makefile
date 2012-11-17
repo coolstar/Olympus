@@ -13,5 +13,5 @@ Olympus_LDFLAGS = -lactivator -Llib/
 THEOS_BUILD_DIR = debs/
 
 include $(THEOS_MAKE_PATH)/tweak.mk
-SUBPROJECTS += olympus
+SUBPROJECTS += olympusprefs
 include $(THEOS_MAKE_PATH)/aggregate.mk
