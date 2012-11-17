@@ -18,7 +18,7 @@ static NSDictionary *prefs = nil;
 static BOOL socialActivitiesEnabled = YES;
 static BOOL messagingEnabled = YES;
 
-static BOOL hasTelephony = NO];
+static BOOL hasTelephony = NO;
 
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
 {
