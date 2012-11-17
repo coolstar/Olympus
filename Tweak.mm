@@ -14,6 +14,10 @@
 
 @implementation OlympusListener
 
+static NSDictionary *prefs = nil;
+static BOOL socialActivitiesEnabled = YES;
+static BOOL messagingEnabled = YES;
+
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
 {
 	if (!_topWindow) {
@@ -37,7 +41,14 @@
 
 	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:toggleActivities];
 
-	[activityViewController setExcludedActivityTypes:[NSArray arrayWithObjects:UIActivityTypeCopyToPasteboard, nil]];
+	NSMutableArray *excludedActivities = [NSMutableArray arrayWithObjects:UIActivityTypeCopyToPasteboard, nil];
+	if (!socialActivitiesEnabled)
+		[excludedActivities addObjectsFromArray:[NSArray arrayWithObjects:UIActivityTypePostToFacebook, UIActivityTypePostToTwitter, UIActivityTypePostToWeibo, nil]];
+
+	if (!messagingEnabled)
+		[excludedActivities addObjectsFromArray:[NSArray arrayWithObjects:UIActivityTypeMessage, UIActivityTypeMail, nil]];
+
+	[activityViewController setExcludedActivityTypes:excludedActivities];
 	[vc presentViewController:activityViewController animated:YES completion:NULL];
 
 	activityViewController.completionHandler = ^(NSString *activityType, BOOL completed) {
@@ -70,3 +81,21 @@
 }
 
 @end
+
+static void olReloadPrefs(void)
+{
+	[prefs release];
+	prefs = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.flux.olympusprefs.plist"];
+	socialActivitiesEnabled = [[prefs objectForKey:@"Social"] boolValue];
+	messagingEnabled = [[prefs objectForKey:@"Messaging"] boolValue];
+}
+
+
+%ctor
+{
+	NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
+	%init;
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)&olReloadPrefs, CFSTR("com.flux.olympus.reloadPrefs"), NULL, CFNotificationSuspensionBehaviorHold);
+	olReloadPrefs();
+	[p drain];
+}

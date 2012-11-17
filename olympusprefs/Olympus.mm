@@ -1,16 +1,17 @@
 #import <Preferences/Preferences.h>
 
-@interface OlympusListController: PSListController {
+@interface OlympusListController: PSListController
+{
 }
 @end
 
 @implementation OlympusListController
-- (id)specifiers {
+- (id)specifiers
+{
 	if(_specifiers == nil) {
 		_specifiers = [[self loadSpecifiersFromPlistName:@"Olympus" target:self] retain];
 	}
 	return _specifiers;
 }
-@end
 
-// vim:ft=objc
+@end
