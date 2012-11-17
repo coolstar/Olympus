@@ -18,6 +18,8 @@ static NSDictionary *prefs = nil;
 static BOOL socialActivitiesEnabled = YES;
 static BOOL messagingEnabled = YES;
 
+static BOOL hasTelephony = NO];
+
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
 {
 	if (!_topWindow) {
@@ -36,10 +38,9 @@ static BOOL messagingEnabled = YES;
 	_powerButton = [[OLPowerButton alloc] initWithView:vc.view];
 	_brightnessSlider = [[OLBrightnessSlider alloc] init];
 
-	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:+11111"]])
-	{
+	if (hasTelephony) {
 		// it has cellular capabilities
-		//_cellularToggle = [[OLCellularToggle alloc] init];
+		_cellularToggle = [[OLCellularToggle alloc] init];
 	}
 
 	NSArray *activityItems = [[NSArray alloc] initWithObjects:@" ", nil];
@@ -102,5 +103,8 @@ static void olReloadPrefs(void)
 	%init;
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)&olReloadPrefs, CFSTR("com.flux.olympus.reloadPrefs"), NULL, CFNotificationSuspensionBehaviorHold);
 	olReloadPrefs();
+
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:+11111"]]) 
+		hasTelephony = YES;
 	[p drain];
 }
