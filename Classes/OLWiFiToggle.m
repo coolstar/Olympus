@@ -1,6 +1,11 @@
 #import "OLWiFiToggle.h"
 #import "BannerClasses.h"
-#import <SpringBoard/SBWiFiManager.h>
+
+@interface SBWiFiManager : NSObject
++ (id)sharedInstance;
+- (BOOL)wiFiEnabled;
+- (void)setWiFiEnabled:(BOOL)enabled;
+@end
 
 @implementation OLWiFiToggle
 

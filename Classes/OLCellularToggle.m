@@ -16,13 +16,11 @@ void CTRegistrationSetCellularDataIsEnabled(void);
 - (UIImage *)activityImage
 {
 	return [UIImage imageNamed:@"olynpus_cellular.png"];
-	//return nil;
-	//return [UIImage imageWithContentsOfFile:@"/var/mobile/Library/SBSettings/Themes/Serious SBSettings HD/Wi-Fi/on.png"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
-	return YES;
+	return ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]]) ? YES : NO;
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems
