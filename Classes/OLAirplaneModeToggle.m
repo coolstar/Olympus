@@ -56,10 +56,6 @@
 	[(SBBulletinBannerController *)[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
 	
 	[p drain];
-	
-	[self activityDidFinish:YES];
-
-	[p drain];
 }
 
 @end
