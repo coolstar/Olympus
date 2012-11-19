@@ -5,12 +5,19 @@
 *	This software is licensed under the Apache License, 2.0.
 */
 
-#import <UIKit/UIKit.h>
-
 #import "OlympusListener.h"
-#import "Classes/OLViewController.h"
+
+#import <UIKit/UIKit.h>
+#import <objc/runtime.h>
+#import <SpringBoard/SBAppSwitcherModel.h>
+#import <SpringBoard/SBApplication.h>
 
 #define UIApp [UIApplication sharedApplication]
+
+@interface OlympusListener (ApplicationNotifications)
+- (void)tellTopAppToResignActive;
+- (void)tellTopAppToResumeActive;
+@end
 
 @implementation OlympusListener
 
@@ -28,6 +35,8 @@ static BOOL messagingEnabled = YES;
 	OLViewController *vc  = [[OLViewController alloc] init];
 	[_topWindow setRootViewController:vc];
 
+	[self tellTopAppToResignActive];
+
 	_wiFiToggle = [[OLWiFiToggle alloc] init];
 	_airplaneToggle = [[OLAirplaneModeToggle alloc] init];
 	_bluetoothToggle = [[OLBTToggle alloc] init];
@@ -37,7 +46,7 @@ static BOOL messagingEnabled = YES;
 	_brightnessSlider = [[OLBrightnessSlider alloc] init];
 
 	NSArray *activityItems = [[NSArray alloc] initWithObjects:@" ", nil];
-	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_airplaneToggle, _wiFiToggle, _bluetoothToggle, _powerButton, _cellularToggle, _brightnessSlider, nil]; 
+	NSArray *toggleActivities =  [[NSArray alloc] initWithObjects:_airplaneToggle, _wiFiToggle, _bluetoothToggle, _powerButton, _brightnessSlider, _cellularToggle, nil]; 
 
 	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:toggleActivities];
 
@@ -64,6 +73,8 @@ static BOOL messagingEnabled = YES;
 		[toggleActivities release];
 		[vc release];
 		[activityViewController release];
+
+		[self tellTopAppToResumeActive];
 	};
 	[event setHandled:YES];
 }
@@ -71,6 +82,25 @@ static BOOL messagingEnabled = YES;
 - (void)activator:(LAActivator *)activator abortEvent:(LAEvent *)event
 {
     [event setHandled:YES];
+}
+
+- (void)tellTopAppToResignActive
+{
+	SBApplication *topApp = [[objc_getClass("SBAppSwitcherModel") sharedInstance] appAtIndex:0];
+	int activationState = (int)object_getIvar(topApp, class_getInstanceVariable([topApp class], "_activationState"));
+	if (activationState == 6 || activationState == 0) // SpringBoard is top
+		return;
+	[topApp notifyResignActiveForReason:1];
+}
+
+- (void)tellTopAppToResumeActive
+{
+	SBApplication *topApp = [[objc_getClass("SBAppSwitcherModel") sharedInstance] appAtIndex:0];
+
+	int activationState = (int)object_getIvar(topApp, class_getInstanceVariable([topApp class], "_activationState"));
+	if (activationState == 6) // SpringBoard is top
+		return;
+	[topApp notifyResumeActiveForReason:1];
 }
 
 + (void)load
