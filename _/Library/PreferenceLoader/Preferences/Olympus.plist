@@ -1,0 +1,10 @@
+{
+    entry = {
+	bundle = Olympus;
+	cell = PSLinkCell;
+	detail = OlympusListController;
+	icon = Olympus.png;
+	isController = 1;
+	label = Olympus;
+    };
+}
