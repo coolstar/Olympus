@@ -8,3 +8,7 @@
 *.dylib
 
 *.stamp
+
+_/*
+
+debs
