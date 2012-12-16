@@ -15,13 +15,15 @@
 
 #define UIApp [UIApplication sharedApplication]
 
-@interface OlympusListener (ApplicationNotifications)
+@interface OlympusListener (Private)
 - (void)tellTopAppToResignActive;
 - (void)tellTopAppToResumeActive;
 @end
 
 @implementation OlympusListener
+@synthesize shouldEditCancelButtonText;
 
+// static variables.
 static NSDictionary *prefs = nil;
 
 static BOOL isBeingDisplayed = NO;
@@ -29,7 +31,13 @@ static BOOL socialActivitiesEnabled = YES;
 static BOOL messagingEnabled = YES;
 static BOOL shouldDismissAfterAction = YES;
 
-static BOOL shouldEditCancelButtonText = NO;
++ (OlympusListener *)sharedInstance
+{
+	static OlympusListener *listener;
+	if (!listener)
+		listener = [self new];
+	return listener;
+}
 
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
 {
@@ -111,13 +119,13 @@ static BOOL shouldEditCancelButtonText = NO;
 + (void)load
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [[LAActivator sharedInstance] registerListener:[self new] forName:@"com.flux.olympus"];
+    [[LAActivator sharedInstance] registerListener:[self sharedInstance] forName:@"com.flux.olympus"];
     [pool drain];
 }
 
 @end
 
-static void olReloadPrefs(void)
+static void OLReloadPrefs(void)
 {
 	[prefs release];
 	prefs = [[NSDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.flux.olympusprefs.plist"];
@@ -126,11 +134,34 @@ static void olReloadPrefs(void)
 	shouldDismissAfterAction = [[prefs objectForKey:@"DismissAfterAction"] boolValue];
 }
 
+
+// hook for the UIActivityViewController's CancelButton
+@interface UIActivityCancelButton : UIButton
+- (void)layoutSubviews;
+@end
+
+%hook UIActivityCancelButton
+- (void)setTitle:(NSString *)title forState:(UIControlState)state
+{
+	if ([[OlympusListener sharedInstance] shouldEditCancelButtonText])
+		%orig(@"Dismiss", state);
+	else
+		%orig(title, state);
+}
+%end
+
+
+
 %ctor
 {
 	NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
 	%init;
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)&olReloadPrefs, CFSTR("com.flux.olympus.reloadPrefs"), NULL, CFNotificationSuspensionBehaviorHold);
-	olReloadPrefs();
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+									NULL,
+									(CFNotificationCallback)&OLReloadPrefs,
+									CFSTR("com.flux.olympus.reloadPrefs"),
+									NULL,
+									CFNotificationSuspensionBehaviorHold);
+	OLReloadPrefs();
 	[p drain];
 }

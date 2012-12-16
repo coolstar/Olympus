@@ -25,5 +25,5 @@
 	OLPowerButton *_powerButton;
 	OLBrightnessSlider *_brightnessSlider;
 }
-
+@property (nonatomic, assign) BOOL shouldEditCancelButtonText;
 @end
